@@ -1,2 +1,2 @@
 # PipiDABS
-### A Comprehensive and User-Friendly `Pip`el`i`ne for `D`ownstream DNA Methylation `A`nalysis from High-throughput `B`isulfite `S`equencing
+##### A Comprehensive and User-Friendly Pipeline for Downstream DNA Methylation Analysis from High-throughput Bisulfite Sequencing
