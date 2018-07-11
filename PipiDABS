@@ -367,7 +367,7 @@ cat("\n\n End Part 4. \n\n\n\n\n")
 
 
 
-## Part 5: Quality control at base pair resolution ...
+## Part 5: Quality control at 100bp resolution ...
 ################################################################################
 cat("\n\n\n\n\n Start Part 5: \n")
 cat("    Quality control at 100bp resolution ... \n\n")
@@ -381,7 +381,7 @@ cat("\n\n End Part 5. \n\n\n\n\n")
 ################################################################################
 
 
-
+ 
 
 
 ## Part 6: Analyze tiling windows by methylKit ...
@@ -408,6 +408,53 @@ sink()
 cat("\n\n End Part 6. \n\n\n\n\n")
 ################################################################################
 
+
+
+
+
+## Part 7: Analyze 1bp C sites by methylKit ...
+################################################################################
+cat("\n\n\n\n\n Start Part 7: \n")
+cat("    Analyze 1bp C sites by using methylKit ... \n\n")
+sink(file = paste(myRunLog_g, "Part_7.runLog.txt", sep="/") )
+Part7_g = paste(outDir_g, "/7_Analyze_1bp_by_methylKit",  sep="") 
+if( ! file.exists(Part7_g) )    { dir.create(Part7_g,    recursive = TRUE) }
+source( paste(AbsolutePathOfFunctions_g, "MainFunction_for_1bp.R", sep="/"        )  )
+source( paste(AbsolutePathOfFunctions_g, "Compare_10groups_1bp.R", sep="/"        )  )
+
+myCompare_10groups_1bp_g(methylBase_temp_1=my_methylBase_object_g,                              
+                         myPath_temp_1=Part7_g,   qvalue_temp_1=qvalue_g,    
+                         differenceOfMethylation_temp_1=differenceOfMethylation_g,    
+                         mergeDistance_temp_1=mergeDistance_g,  numCores_temp_1=numCores_g 
+)                                             
+
+sink() 
+cat("\n\n End Part 7. \n\n\n\n\n")
+################################################################################
+
+
+
+
+
+## Part 8: Analyze some specific regions by methylKit ...
+################################################################################
+cat("\n\n\n\n\n Start Part 8: \n")
+cat("    Analyze some specific regions by using methylKit ... \n\n")
+sink(file = paste(myRunLog_g, "Part_8.runLog.txt", sep="/") )
+Part8_g = paste(outDir_g, "/8_Analyze_speRegions_by_methylKit",  sep="") 
+if( ! file.exists(Part8_g) )    { dir.create(Part8_g,    recursive = TRUE) }
+source( paste(AbsolutePathOfFunctions_g, "MainFunction_for_speRegions.R", sep="/"     )  )
+source( paste(AbsolutePathOfFunctions_g, "Compare_10groups_speLoci.R",    sep="/"     )  )
+
+myCompare_10groups_speLoci_g(methylBase_temp_1=my_methylBase_object_g,  
+	                         myPath_temp_1=Part8_g,  qvalue_temp_1=qvalue_g,  
+	                         differenceOfMethylation_temp_1=differenceOfMethylation_g,  
+	                         mergeDistance_temp1=mergeDistance_g,  minBases_temp_1=minBasesSpecificRegions_g,  numCores_temp_1=numCores_g 
+)                                              
+
+sink() 
+cat("\n\n End Part 8. \n\n\n\n\n")
+################################################################################
 
 
 
