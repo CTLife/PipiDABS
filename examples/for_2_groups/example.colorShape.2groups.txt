@@ -1,0 +1,5 @@
+standards	type_name	color_shape
+group	NC1	slateblue1
+group	IVF-fresh1	skyblue
+other_feature	girl	17
+other_feature	boy	16
