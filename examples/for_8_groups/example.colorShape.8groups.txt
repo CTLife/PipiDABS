@@ -1,0 +1,11 @@
+standards	type_name	color_shape
+group	NC1	slateblue1
+group	NC2	slateblue4
+group	IVF-fresh1	skyblue
+group	IVF-fresh2	deepskyblue
+group	ICSI-fresh1	pink
+group	IVF-frozen1	cyan1
+group	ICSI-frozen1	red1
+group	ICSI-frozen2	red4
+other_feature	girl	17
+other_feature	boy	16
