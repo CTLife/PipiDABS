@@ -1,5 +1,5 @@
 # PipiDABS
-### A Comprehensive and User-Friendly Pipeline for Downstream DNA Methylation Analysis from High-throughput Bisulfite Sequencing        
+### A Comprehensive and User-Friendly Pipeline for Downstream DNA Methylation Analysis of High-throughput Bisulfite Sequencing Data       
 + [Download PipiDABS](https://github.com/CTLife/PipiDABS/releases) and [set PATH environment variable](https://www.computerhope.com/issues/ch001647.htm) in Linux.       
 + Run "PipiDABS -h" to get some help.  
 + Examples are available in directory "examples".
