@@ -11,7 +11,7 @@
 
 ## Part 1: Get arguments, system informations, versions of packages, etc ...
 ###########################################################################################################
-rm( list=ls() )    # remove all the objects from the R session
+rm( list=ls() )    # remove all the objects from the R session                        
 PathOfPipiDABS_g          = system(command = "which PipiDABS",  intern = TRUE) 
 PathOfPipiDABS_g          = gsub(pattern="/PipiDABS$", replacement="", x=PathOfPipiDABS_g, ignore.case = FALSE, perl = TRUE)                                              
 AbsolutePathOfFunctions_g = paste(PathOfPipiDABS_g, "functions", sep="/")
