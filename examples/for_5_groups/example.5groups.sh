@@ -1,5 +1,5 @@
 #!/bin/bash
-PipiDABS      \
+PipiDABS                     \
 --projectName                ART_Methylome     \
 --author                     YongPeng           \
 --samplesInformation         example.samples_information.5groups.txt     \
