@@ -14,7 +14,7 @@ MyCluster_1_g <- function( mymeth1 ,  path1, file1, width1, height1, sdThres1 ) 
 
 
 
-
+                                                         
 MyCluster_2_g <- function( mymeth1 ,  path1, file1, width1, height1, sdThres1 ) {  
   myTempValue = tryCatch(
     clusterSamples(mymeth1, dist="correlation", method="ward",     sd.filter=TRUE,   sd.threshold=sdThres1,        filterByQuantile=FALSE, plot=FALSE  ), 
