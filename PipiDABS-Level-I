@@ -84,7 +84,7 @@ Part2_g   = paste(outDir_g,   "2_Get_Input_Files",  sep="/")
 if( ! file.exists(Part2_g) )    { dir.create(Part2_g,    recursive = TRUE) }
 source( paste(AbsolutePathOfFunctions_g, "3_getInputFiles.R", sep="/") )  
 if(SpecificRegions_g) {
-source( paste(AbsolutePathOfFunctions_g, "4A_getSpecificRegions.R", sep="/") )  
+source( paste(AbsolutePathOfFunctions_g, "4I_getSpecificRegions.R", sep="/") )  
 sink( paste(Part2_g,  "/6_Specific-Loci-Files.txt",  sep = "") )
     print( mySpecificLoci_1_g  )
     print( mySpecificLoci_2_g  )
@@ -295,36 +295,6 @@ myobj_nor_g <- kept.myobj_g
 
 
 
-myTempFunction_g <- function() {
-Part3_g3 = paste(Part3_g, "/Segmentation_Of_Each_Sample",  sep="") 
-if( ! file.exists(Part3_g3) ) { dir.create(Part3_g3, recursive = TRUE) }
-
-pdf( file=paste(Part3_g3, "Segmentation_diagnostic_plot.pdf", sep="/")  )
-for( i in c(1:length(myobj_g)) ) {
-   res_temp_1 = methylKit::methSeg( myobj_nor_g[[i]] , diagnostic.plot=TRUE, maxInt=100,  minSeg=10,  G=1:5)
-   file_name = ShortName_All_vector_g[i]   
-   methylKit::methSeg2bed(res_temp_1,   filename= paste(Part3_g3, "/", file_name,".bed", sep="") )
-}
-dev.off()    
-
-Part3_g4 = paste(Part3_g, "/Segmentation_Of_Each_Sample_Unrestricted",  sep="") 
-if( ! file.exists(Part3_g4) ) { dir.create(Part3_g4, recursive = TRUE) }
-
-pdf( file=paste(Part3_g4, "Segmentation_diagnostic_plot.pdf", sep="/")  )
-for( i in c(1:length(myobj_g)) ) {
-   res_temp_1 = methylKit::methSeg( myobj_nor_g[[i]] , diagnostic.plot=TRUE, maxInt=100,  minSeg=10 )
-   file_name = ShortName_All_vector_g[i]   
-   methylKit::methSeg2bed(res_temp_1,   filename= paste(Part3_g4, "/", file_name,".bed", sep="") )
-}
-dev.off()    
-}
-tryCatch(
-    myTempFunction_g(),
-    error = function(err){"myTempFunction_g_Segmentation_000123"}
-)
-
-
-
 
 cat("\n\n\n")
 my_methylBase_object_g = NA
@@ -373,15 +343,6 @@ cat("\n\n End Part 3. \n\n\n\n\n")
 
 
 
-
-## Part 4: Quality control at base pair resolution (1bp) ...
-################################################################################
-cat("\n\n\n\n\n Start Part 4: \n")
-cat("    Quality control at base pair resolution ... \n\n")
-sink( file = paste(myRunLog_g, "Part_4.runLog.txt", sep="/") )
-Part4_g = paste(outDir_g, "/4_QC_1bp_Resolution",  sep="" ) 
-if( ! file.exists(Part4_g) )    { dir.create(Part4_g,    recursive = TRUE) }
-
 functionsByContext_1_g = ""
 if(cytosineContext_g=="CpG") { 
        functionsByContext_1_g="14A_forEachType.R"  
@@ -399,164 +360,36 @@ source( paste(AbsolutePathOfFunctions_g, "11_Hierarchical_clustering_hclust.R", 
 source( paste(AbsolutePathOfFunctions_g, "12_PCA_methylKit_further_prcomp.R", sep="/"      )  ) 
 source( paste(AbsolutePathOfFunctions_g, "13_MultidimensionalScaling.R", sep="/"           )  ) 
 source( paste(AbsolutePathOfFunctions_g,  functionsByContext_1_g,  sep="/"                       )  ) 
-source( paste(AbsolutePathOfFunctions_g, "15_myQCresults_allsamples_1bp.R", sep="/"        )  )
-myQCresults_allsamples_1bp(methylBase_temp1 = my_methylBase_object_g,   path_temp1 = Part4_g ) 
-sink() 
-cat("\n\n End Part 4. \n\n\n\n\n")
-################################################################################
-
-
-
-if(0==0) {
-
-## Part 5: Quality control at 100bp resolution ...
-################################################################################
-if(0==0) {
-cat("\n\n\n\n\n Start Part 5: \n")
-cat("    Quality control at 100bp resolution ... \n\n")
-sink( file = paste(myRunLog_g, "Part_5.runLog.txt", sep="/") )
-Part5_g = paste(outDir_g, "/5_QC_100bp_Resolution",  sep="" ) 
-if( ! file.exists(Part5_g) )    { dir.create(Part5_g,    recursive = TRUE) }
-source( paste(AbsolutePathOfFunctions_g, "16_myQCresults_allsamples_100bp.R", sep="/"        )  )
-myQCresults_allsamples_100bp(methylBase_temp1 = my_methylBase_object_g,   path_temp1 = Part5_g ) 
-sink() 
-cat("\n\n End Part 5. \n\n\n\n\n")
-}
-################################################################################
-
-
-
-
-
-## Part 6: Quality control at 300bp resolution ...
-################################################################################
-if(0==0) {
-  cat("\n\n\n\n\n Start Part 6: \n")
-  cat("    Quality control at 300bp resolution ... \n\n")
-  sink( file = paste(myRunLog_g, "Part_6.runLog.txt", sep="/") )
-  Part6_g = paste(outDir_g, "/6_QC_300bp_Resolution",  sep="" ) 
-  if( ! file.exists(Part6_g) )    { dir.create(Part6_g,    recursive = TRUE) }
-  source( paste(AbsolutePathOfFunctions_g, "17_myQCresults_allsamples_300bp.R", sep="/"        )  )
-  myQCresults_allsamples_300bp(methylBase_temp1 = my_methylBase_object_g,   path_temp1 = Part6_g ) 
-  sink() 
-  cat("\n\n End Part 6. \n\n\n\n\n")
-}
-################################################################################
-
-
-
-
-
-## Part 7: Quality control at 600bp resolution ...
-################################################################################
-if(0==0) {
-  cat("\n\n\n\n\n Start Part 7: \n")
-  cat("    Quality control at 600bp resolution ... \n\n")
-  sink( file = paste(myRunLog_g, "Part_7.runLog.txt", sep="/") )
-  Part7_g = paste(outDir_g, "/7_QC_600bp_Resolution",  sep="" ) 
-  if( ! file.exists(Part7_g) )    { dir.create(Part7_g,    recursive = TRUE) }
-  source( paste(AbsolutePathOfFunctions_g, "18_myQCresults_allsamples_600bp.R", sep="/"        )  )
-  myQCresults_allsamples_600bp(methylBase_temp1 = my_methylBase_object_g,   path_temp1 = Part7_g ) 
-  sink() 
-  cat("\n\n End Part 7. \n\n\n\n\n")
-}
-################################################################################
-
-
-
-
-
-## Part 8: Quality control at 1000bp resolution ...
-################################################################################
-if(0==0) {
-  cat("\n\n\n\n\n Start Part 8: \n")
-  cat("    Quality control at 1000bp resolution ... \n\n")
-  sink( file = paste(myRunLog_g, "Part_8.runLog.txt", sep="/") )
-  Part8_g = paste(outDir_g, "/8_QC_1000bp_Resolution",  sep="" ) 
-  if( ! file.exists(Part8_g) )    { dir.create(Part8_g,    recursive = TRUE) }
-  source( paste(AbsolutePathOfFunctions_g, "19_myQCresults_allsamples_1000bp.R", sep="/"        )  )
-  myQCresults_allsamples_1000bp(methylBase_temp1 = my_methylBase_object_g,   path_temp1 = Part8_g ) 
-  sink() 
-  cat("\n\n End Part 8. \n\n\n\n\n")
-}
-################################################################################
-
-
-
-
-
-## Part 9: Analyze tiling windows by methylKit ...
-################################################################################
-cat("\n\n\n\n\n Start Part 9: \n")
-cat("    Analyze tiling windows by using methylKit ... \n\n")
-sink(file = paste(myRunLog_g, "Part_9.runLog.txt", sep="/") )
-Part9_g = paste(outDir_g, "/9_Analyze_Tiles",  sep="") 
-if( ! file.exists(Part9_g) )    { dir.create(Part9_g,    recursive = TRUE) }
 source( paste(AbsolutePathOfFunctions_g, "20_MainFunction_for_Tiles.R", sep="/"        )  )
 source( paste(AbsolutePathOfFunctions_g, "21_DMCs_DMRs.R", sep="/"        )  )
 source( paste(AbsolutePathOfFunctions_g, "22_diffMe_select.R", sep="/"        )  )
 source( paste(AbsolutePathOfFunctions_g, "23_DMCs_DMRs_annotation.R", sep="/"        )  )
-source( paste(AbsolutePathOfFunctions_g, "24_Compare_10groups_tiles.R", sep="/"        )  )
+ 
 
-myCompare_10groups_tiles_g(methylBase_temp_1=my_methylBase_object_g,                              
-                           myPath_temp_1=Part9_g,   qvalue_temp_1=qvalue_g,    
-                           differenceOfMethylation_temp_1=differenceOfMethylation_g,   
-                           windowSize_temp_1=windowSize_g,     stepSize_temp_1=stepSize_g,  
-                           mergeDistance_temp_1=mergeDistance_g,  minBases_temp_1=minBases_g, numCores_temp_1=numCores_g 
-)                                             
 
-sink() 
-cat("\n\n End Part 9. \n\n\n\n\n")
+
+
+
+## Part 4: Analyze some specific regions by methylKit ...
 ################################################################################
-
-
-
-
-
-## Part 10: Analyze 1bp C sites by methylKit ...
-################################################################################
-cat("\n\n\n\n\n Start Part 10: \n")
-cat("    Analyze 1bp C sites by using methylKit ... \n\n")
-sink(file = paste(myRunLog_g, "Part_10.runLog.txt", sep="/") )
-Part10_g = paste(outDir_g, "/10_Analyze_1bp_sites",  sep="") 
-if( ! file.exists(Part10_g) )    { dir.create(Part10_g,    recursive = TRUE) }
-source( paste(AbsolutePathOfFunctions_g, "25_MainFunction_for_1bp.R", sep="/"        )  )
-source( paste(AbsolutePathOfFunctions_g, "26_Compare_10groups_1bp.R", sep="/"        )  )
-
-myCompare_10groups_1bp_g(methylBase_temp_1=my_methylBase_object_g,                              
-                         myPath_temp_1=Part10_g,   qvalue_temp_1=qvalue_g,    
-                         differenceOfMethylation_temp_1=differenceOfMethylation_g,    
-                         mergeDistance_temp_1=mergeDistance_g,  numCores_temp_1=numCores_g 
-)                                             
-
-sink() 
-cat("\n\n End Part 10. \n\n\n\n\n")
-################################################################################
-
-
-
-
-
-## Part 11: Analyze some specific regions by methylKit ...
-################################################################################
-cat("\n\n\n\n\n Start Part 11: \n")
+cat("\n\n\n\n\n Start Part 4: \n")
 cat("    Analyze some specific regions by using methylKit ... \n\n")
-sink(file = paste(myRunLog_g, "Part_11.runLog.txt", sep="/") )
-Part11_g = paste(outDir_g, "/11_Analyze_SomeRegions",  sep="") 
-if( ! file.exists(Part11_g) )    { dir.create(Part11_g,    recursive = TRUE) }
-source( paste(AbsolutePathOfFunctions_g, "27_MainFunction_for_speRegions.R", sep="/"     )  )
-source( paste(AbsolutePathOfFunctions_g, "28_Compare_10groups_speLoci.R",    sep="/"     )  )
+sink(file = paste(myRunLog_g, "Part_4.runLog.txt", sep="/") )
+Part4_g = paste(outDir_g, "/4_Analyze_SomeRegions",  sep="") 
+if( ! file.exists(Part4_g) )    { dir.create(Part4_g,    recursive = TRUE) }
+source( paste(AbsolutePathOfFunctions_g, "29_MainFunction_for_speRegions.R", sep="/"     )  )
+source( paste(AbsolutePathOfFunctions_g, "30_Compare_10groups_speLoci.R",    sep="/"     )  )
 
 myCompare_10groups_speLoci_g(methylBase_temp_1=my_methylBase_object_g,  
-	                         myPath_temp_1=Part11_g,  qvalue_temp_1=qvalue_g,  
+	                         myPath_temp_1=Part4_g,  qvalue_temp_1=qvalue_g,  
 	                         differenceOfMethylation_temp_1=differenceOfMethylation_g,  
 	                         mergeDistance_temp1=mergeDistance_g,  minBases_temp_1=minBasesSpecificRegions_g,  numCores_temp_1=numCores_g 
 )                                              
 
 sink() 
-cat("\n\n End Part 11. \n\n\n\n\n")
+cat("\n\n End Part 4. \n\n\n\n\n")
 ################################################################################
 
-}
+
 
 
