@@ -1,0 +1,395 @@
+#! /usr/bin/env Rscript
+###########################################################################################################
+### PipiDABS: A Comprehensive and User-Friendly Pipeline for Downstream DNA Methylation Analysis 
+###           of High-throughput Bisulfite Sequencing Data                     
+### Run "PipiDABS -h" to get some help.
+###########################################################################################################
+
+
+
+
+
+## Part 1: Get arguments, system informations, versions of packages, etc ...
+###########################################################################################################
+rm( list=ls() )    # remove all the objects from the R session
+PathOfPipiDABS_g          = system(command = "which PipiDABS",  intern = TRUE) 
+PathOfPipiDABS_g          = gsub(pattern="/PipiDABS$", replacement="", x=PathOfPipiDABS_g, ignore.case = FALSE, perl = TRUE)                                              
+AbsolutePathOfFunctions_g = paste(PathOfPipiDABS_g, "functions", sep="/")
+source( paste(AbsolutePathOfFunctions_g,   "1_getParameters.R",    sep="/") )  
+myRunLog_g = paste(outDir_g, "Running_Log",              sep="/"  )
+Part1_g    = paste(outDir_g, "1_Get_Options_Versions",   sep="/"  ) 
+if( ! file.exists(outDir_g)   ) { dir.create(outDir_g,   recursive = TRUE) }
+if( ! file.exists(myRunLog_g) ) { dir.create(myRunLog_g, recursive = TRUE) }
+if( ! file.exists(Part1_g)    ) { dir.create(Part1_g,    recursive = TRUE) }
+cat("\n\n\n\n\n Start Part 1: \n")
+cat("    Get arguments, system informations, versions of packages, etc ... \n\n")
+sink(file = paste(myRunLog_g, "Part_1.runLog.txt", sep="/") )
+source( paste(AbsolutePathOfFunctions_g,   "2_loadAllPackages.R",   sep="/") )  
+cat("\n All required packages are loaded correctly. \n\n\n")
+sink( paste(Part1_g,  "/1_Parameters.txt",  sep = "") )
+    print( paste("projectName_g"             , projectName_g,             sep=":  ") )
+    print( paste("author_g"                  , author_g,                  sep=":  ") )
+    print( paste("samplesInformation_g"      , samplesInformation_g,      sep=":  ") )
+    print( paste("colorShape_g"              , colorShape_g,              sep=":  ") )
+    print( paste("outDir_g"                  , outDir_g,                  sep=":  ") )
+    print( paste("lowestCoverage_g"          , lowestCoverage_g,          sep=":  ") )
+    print( paste("numberCoveredSamples_g"    , numberCoveredSamples_g,    sep=":  ") )
+    print( paste("RefGenomes_g"              , RefGenomes_g,              sep=":  ") )
+    print( paste("fileFormat_g"              , fileFormat_g,              sep=":  ") )
+    print( paste("cytosineContext_g"         , cytosineContext_g,         sep=":  ") )
+    print( paste("qvalue_g"                  , qvalue_g,                  sep=":  ") )
+    print( paste("differenceOfMethylation_g" , differenceOfMethylation_g, sep=":  ") )
+    print( paste("windowSize_g"              , windowSize_g,              sep=":  ") )
+    print( paste("stepSize_g"                , stepSize_g,                sep=":  ") )
+    print( paste("mergeDistance_g"           , mergeDistance_g,           sep=":  ") )
+    print( paste("minBases_g"                , minBases_g,                sep=":  ") )
+    print( paste("numCores_g"                , numCores_g,                sep=":  ") )
+    print( paste("SpecificRegions_g"         , SpecificRegions_g,         sep=":  ") )
+    print( paste("minBasesSpecificRegions_g" , minBasesSpecificRegions_g, sep=":  ") )
+    print( paste("forceCairoGraph_g"         , forceCairoGraph_g,         sep=":  ") )
+    print( paste("workDir_g"                 , workDir_g,                 sep=":  ") )
+    print( paste("PathOfPipiDABS_g"          , PathOfPipiDABS_g,          sep=":  ") )
+    print( paste("AbsolutePathOfFunctions_g" , AbsolutePathOfFunctions_g, sep=":  ") )
+    print( paste("topPercentageCoverage_g"   , topPercentageCoverage_g,   sep=":  ") )
+sink()
+sink( paste(Part1_g,  "/2_Versions_All.txt",  sep = "") )
+    print( sessionInfo() ) 
+sink()
+sink( paste(Part1_g,  "/3_Versions_Selected.txt",  sep = "") )
+    print( paste("ggplot2",    packageVersion("ggplot2"),    sep=":  " ) ) 
+    print( paste("genomation", packageVersion("genomation"), sep=":  " ) )
+    print( paste("methylKit",  packageVersion("methylKit"),  sep=":  " ) )
+    print( paste("DSS",        packageVersion("DSS"),        sep=":  " ) )
+    print( paste("RnBeads",    packageVersion("RnBeads"),    sep=":  " ) ) 
+    print( paste("ChIPseeker", packageVersion("ChIPseeker"), sep=":  " ) ) 
+sink()
+sink( paste(Part1_g,  "/4_Date-Time.txt",  sep = "") )
+     print( Sys.time() )
+     print( Sys.Date() )
+sink()
+sink()
+cat("\n End Part 1. \n\n\n\n\n")
+###########################################################################################################
+
+
+
+
+
+## Part 2: Get the input files and some specific regions ...
+################################################################################
+cat("\n\n\n\n\n Start Part 2: \n")
+cat("    Get the input files and some specific regions ... \n\n")
+sink(file = paste(myRunLog_g, "Part_2.runLog.txt",  sep="/") )
+Part2_g   = paste(outDir_g,   "2_Get_Input_Files",  sep="/") 
+if( ! file.exists(Part2_g) )    { dir.create(Part2_g,    recursive = TRUE) }
+source( paste(AbsolutePathOfFunctions_g, "3_getInputFiles.R", sep="/") )  
+if(SpecificRegions_g) {
+source( paste(AbsolutePathOfFunctions_g, "4C_getSpecificRegions.R", sep="/") )  
+sink( paste(Part2_g,  "/6_Specific-Loci-Files.txt",  sep = "") )
+    print( mySpecificLoci_1_g  )
+    print( mySpecificLoci_2_g  )
+    print( mySpecificLoci_3_g  )
+    print( mySpecificLoci_4_g  )
+    print( mySpecificLoci_5_g  )
+    print( mySpecificLoci_6_g  )
+    print( mySpecificLoci_7_g  )
+    print( mySpecificLoci_8_g  )
+    print( mySpecificLoci_9_g  )
+    print( mySpecificLoci_10_g )
+    print( mySpecificLoci_11_g )
+    print( mySpecificLoci_12_g )
+    print( mySpecificLoci_13_g )
+    print( mySpecificLoci_14_g )
+    print( mySpecificLoci_15_g )
+    print( mySpecificLoci_16_g )
+    print( mySpecificLoci_17_g )
+    print( mySpecificLoci_18_g )
+    print( mySpecificLoci_19_g )
+    print( mySpecificLoci_20_g )  
+sink()
+sink( paste(Part2_g,  "/7_Specific-Loci-Processed.txt",  sep = "") )
+    print( mySpecificLoci_1A.obj_g )
+    print( mySpecificLoci_1B.obj_g )
+    print( mySpecificLoci_2.obj_g  )
+    print( mySpecificLoci_3.obj_g  )
+    print( mySpecificLoci_4.obj_g  )
+    print( mySpecificLoci_5.obj_g  )
+    print( mySpecificLoci_6.obj_g  )
+    print( mySpecificLoci_7.obj_g  )
+    print( mySpecificLoci_8.obj_g  )
+    print( mySpecificLoci_9.obj_g  )
+    print( mySpecificLoci_10.obj_g )
+    print( mySpecificLoci_11.obj_g )
+    print( mySpecificLoci_12.obj_g )
+    print( mySpecificLoci_13.obj_g )
+    print( mySpecificLoci_14.obj_g )
+    print( mySpecificLoci_15.obj_g )
+    print( mySpecificLoci_16.obj_g )
+    print( mySpecificLoci_17.obj_g )
+    print( mySpecificLoci_18.obj_g )
+    print( mySpecificLoci_19.obj_g )
+    print( mySpecificLoci_20.obj_g )  
+sink()
+}
+sink() 
+cat("\n End Part 2. \n\n\n\n\n")
+################################################################################
+
+
+
+
+
+## Part 3: Read the raw files ...
+################################################################################
+cat("\n\n\n\n\n Start Part 3: \n")
+cat("    Read the raw files ... \n\n")
+sink(file = paste(myRunLog_g, "Part_3.runLog.txt", sep="/") )
+Part3_g = paste(outDir_g, "/3_Read_Raw_Files",  sep="") 
+if( ! file.exists(Part3_g) )    { dir.create(Part3_g,    recursive = TRUE) }
+sink( file=paste(Part3_g, "1_theLog-of-read-inputFiles.txt", sep="/") )
+myobj_g = methylKit::methRead(location   = Files_All_list_g, 
+                   sample.id  = SampleID_All_list_g, 
+                   assembly   = RefGenomes_g, 
+                   pipeline   = fileFormat_g,
+                   header     = FALSE, 
+                   sep        = "\t", 
+                   context    = cytosineContext_g,
+                   resolution = "base",  ## allowed values 'base' or 'region'.
+                   treatment  = Treatment_All_vector_g, 
+                   mincov     = lowestCoverage_g
+)
+sink()
+
+sink( file=paste(Part3_g, "2_all-rawFiles.txt", sep="/") )
+    print(myobj_g)
+sink()
+
+sink( file=paste(Part3_g, "3_dimensions-of-eachFile-eachCov.txt", sep="/")  )
+for( i in c(1:length(Files_All_vector_g)) ) {
+  print( "######################" )
+  print(   Files_All_vector_g[i]  )
+  print(   dim(myobj_g[[i]])  )
+}
+sink()
+
+sink( file=paste(Part3_g, "4_dimensions-of-eachCov.txt", sep="/")  )
+for( i in c(1:length(Files_All_vector_g)) ) {
+  cat(   dim(myobj_g[[i]])[1], "\t", dim(myobj_g[[i]])[2], "\t", Files_All_vector_g[i], "\n"  )    
+}
+sink()
+
+sink( file=paste(Part3_g, "5_Check-each-file.txt", sep="/")  )
+for( i in c(1:length(Files_All_vector_g)) ) {
+  temp_matrix1 <- read.table(file = Files_All_vector_g[i], header = FALSE, sep = "\t" )
+  temp_matrix1_cov = rowSums(temp_matrix1[,c(5,6)])
+  temp_matrix1 = temp_matrix1[temp_matrix1_cov>=lowestCoverage_g, ]
+  temp_matrix2 <- methylKit::getData(myobj_g[[i]])
+  myNumCs_1 = temp_matrix1[,5]   
+  myNumTs_1 = temp_matrix1[,6]  
+  myNumCs_2 = temp_matrix2[,6]  
+  myNumTs_2 = temp_matrix2[,7]  
+  if( identical(myNumCs_1,myNumCs_2) & identical(myNumTs_1,myNumTs_2) ) {
+    cat("Yes\n")
+  }else{
+    cat(" ##Wrong## ",  ShortName_All_vector_g[i], "\n" )
+    stop(ShortName_All_vector_g[i])
+  }
+}
+sink()
+
+
+myPercentageTop_g = as.numeric(100 - topPercentageCoverage_g)
+## remove potential PCR duplicates.
+kept.myobj_g = methylKit::filterByCoverage( myobj_g,  lo.count = lowestCoverage_g,  lo.perc = NULL,  hi.count = NULL,  
+                                 hi.perc = myPercentageTop_g,  chunk.size = 1e+07,  save.db = FALSE )        
+sink( file=paste(Part3_g, "6_dimensions-of-eachCov.kept.txt", sep="/")  )
+for( i in c(1:length(Files_All_vector_g)) ) {
+  cat(   dim(kept.myobj_g[[i]])[1], "\t", dim(kept.myobj_g[[i]])[2], "\t", ShortName_All_vector_g[i], "\n"  )    
+}
+sink()
+
+######## only for the removed C sites.
+removed.myobj_g1 = methylKit::filterByCoverage( myobj_g,  lo.count = NULL,  lo.perc = myPercentageTop_g,  hi.count = NULL,  
+                                     hi.perc = NULL,  chunk.size = 1e+07,  save.db = FALSE )
+Part3_g2 = paste(Part3_g, "/removed_C_sites",  sep="") 
+if( ! file.exists(Part3_g2) ) { dir.create(Part3_g2, recursive = TRUE) }
+for( i in c(1:length(Files_All_vector_g)) ) {
+  file_name = ShortName_All_vector_g[i]   
+  write.table(methylKit::getData(removed.myobj_g1[[i]])  ,  file = paste(Part3_g2,   file_name,  sep="/"), 
+              append = FALSE, quote = FALSE, sep = "\t", eol = "\n", na = "NA", dec = ".", 
+              row.names = FALSE,  col.names = TRUE, qmethod = c("escape", "double"),  fileEncoding = "")
+}
+sink( file=paste(Part3_g, "7A_dimensions-removed.txt", sep="/")  )
+for( i in c(1:length(Files_All_vector_g)) ) {
+  cat(   dim(removed.myobj_g1[[i]])[1], "\t", dim(removed.myobj_g1[[i]])[2], "\t", ShortName_All_vector_g[i], "\n"  )    
+}
+sink()
+sink( file=paste(Part3_g, "7B_coverageStat-of-eachCov.removed.txt", sep="/")  )
+cat(   "min", "\t", "mean", "\t",  "median", "\t",  "max", "\t", "sample", "\n"  )    
+for( i in c(1:length(Files_All_vector_g)) ) {
+  myTempCov1 = methylKit::getData( removed.myobj_g1[[i]] )[,5]
+  cat(   min(myTempCov1), "\t", mean(myTempCov1), "\t",  median(myTempCov1), "\t",  max(myTempCov1), "\t", ShortName_All_vector_g[i], "\n"  )    
+}
+sink()
+########end
+
+sink( file=paste(Part3_g, "8A_dimensions.keptCsites.txt", sep="/")  )
+for( i in c(1:length(Files_All_vector_g)) ) {
+  cat(   dim(kept.myobj_g[[i]])[1], "\t", dim(kept.myobj_g[[i]])[2], "\t", ShortName_All_vector_g[i], "\n"  )    
+}
+sink()
+
+sink( file=paste(Part3_g, "8B_coverageStat-of-eachCov.keptCsites.txt", sep="/")  )
+cat(   "min", "\t", "mean", "\t",  "median", "\t",  "max", "\t", "sample", "\n"  )    
+for( i in c(1:length(Files_All_vector_g)) ) {
+  myTempCov1 = methylKit::getData( kept.myobj_g[[i]] )[,5]
+  cat(   min(myTempCov1), "\t", mean(myTempCov1), "\t",  median(myTempCov1), "\t",  max(myTempCov1), "\t", ShortName_All_vector_g[i], "\n"  )    
+}
+sink()
+
+sink( file=paste(Part3_g, "9A_dimensions.raw.txt", sep="/")  )
+for( i in c(1:length(Files_All_vector_g)) ) {
+  cat(   dim(myobj_g[[i]])[1], "\t", dim(myobj_g[[i]])[2], "\t", ShortName_All_vector_g[i], "\n"  )    
+}
+sink()
+
+sink( file=paste(Part3_g, "9B_coverageStat-of-eachCov.raw.txt", sep="/")  )
+cat(   "min", "\t", "mean", "\t",  "median", "\t",  "max", "\t", "sample", "\n"  )    
+for( i in c(1:length(Files_All_vector_g)) ) {
+  myTempCov1 = methylKit::getData( myobj_g[[i]] )[,5]
+  cat(   min(myTempCov1), "\t", mean(myTempCov1), "\t",  median(myTempCov1), "\t",  max(myTempCov1), "\t", ShortName_All_vector_g[i], "\n"  )    
+}
+sink()
+
+sink( file=paste(Part3_g, "10_dimensions-all.txt", sep="/")  )
+cat("Raw",  "Kept",   "Removed",  "Files", "\n", sep="\t")
+for( i in c(1:length(Files_All_vector_g)) ) {
+  cat(    dim(myobj_g[[i]])[1],   dim(kept.myobj_g[[i]])[1],   dim(removed.myobj_g1[[i]])[1] ,   ShortName_All_vector_g[i], "\n" , sep="\t" )    
+}
+sink()
+
+pdf( file=paste(Part3_g, "11_Methylation_Level_distribution.pdf", sep="/")  )
+par(mfrow=c(2,3))
+for( i in c(1:length(myobj_g)) ) {
+  methylKit::getMethylationStats(myobj_g[[i]],          plot=TRUE, both.strands=FALSE )
+  methylKit::getMethylationStats(kept.myobj_g[[i]],     plot=TRUE, both.strands=FALSE )
+  methylKit::getMethylationStats(removed.myobj_g1[[i]], plot=TRUE, both.strands=FALSE )
+}
+dev.off()
+
+pdf( file=paste(Part3_g, "12_Coverage_distribution.pdf", sep="/")  )
+par(mfrow=c(2,3))
+for( i in c(1:length(myobj_g)) ) {
+  methylKit::getCoverageStats(myobj_g[[i]],          plot=TRUE, both.strands=FALSE )
+  methylKit::getCoverageStats(kept.myobj_g[[i]],     plot=TRUE, both.strands=FALSE )
+  methylKit::getCoverageStats(removed.myobj_g1[[i]], plot=TRUE, both.strands=FALSE )
+
+}
+dev.off()
+
+##### How to normalize the raw data.
+myobj_nor_g <- kept.myobj_g
+## myobj_nor_g <- normalizeCoverage(kept.myobj_g,  method = "median")
+
+
+
+
+
+
+cat("\n\n\n")
+my_methylBase_object_g = NA
+if( numberCoveredSamples_g >= 1 ) {
+    cat("\n\n\n")
+    print( paste(numberCoveredSamples_g, "samples must be covered in each group.", sep=" ") )
+    cat("\n\n\n")
+    my_methylBase_object_g  = methylKit::unite( myobj_nor_g,  destrand=FALSE,   mc.cores=numCores_g ,  min.per.group = as.integer(numberCoveredSamples_g)  )   
+}else{
+    cat("\n\n\n")
+    print(  "All samples must be covered in each group."  )
+    cat("\n\n\n")
+    (numberCoveredSamples_g==0)  ||  stop("The value of numberCoveredSamples_g is wrong! ")
+    my_methylBase_object_g  = methylKit::unite( myobj_nor_g,  destrand=FALSE,   mc.cores=numCores_g   )   
+}
+
+
+sink( file=paste(Part3_g, "13_methylBase_object.dimension.txt", sep="/")  )
+  print( dim(my_methylBase_object_g) ) 
+sink()
+
+ 
+file14_part3_g = paste(Part3_g, "14_methylBase_object.txt", sep="/")   
+write.table( methylKit::getData(my_methylBase_object_g) ,  file =file14_part3_g, 
+            append = FALSE, quote = FALSE, sep = "\t", eol = "\n", na = "NA", dec = ".", 
+            row.names = FALSE,  col.names = TRUE, qmethod = c("escape", "double"),  fileEncoding = "")
+
+sink( file=paste(Part3_g, "15_methylBase_object.print.txt", sep="/")  )
+    my_methylBase_object_g  
+sink()
+
+file16_part3_g = paste(Part3_g, "16_methylBase_object.summary.txt", sep="/")   
+write.table( summary(my_methylBase_object_g)  ,  file =file16_part3_g, 
+             append = FALSE, quote = FALSE, sep = "\t", eol = "\n", na = "NA", dec = ".", 
+             row.names = FALSE,  col.names = TRUE, qmethod = c("escape", "double"),  fileEncoding = "")
+
+
+rm(myobj_g)
+rm(kept.myobj_g)
+rm(removed.myobj_g1)
+rm(myobj_nor_g)
+sink() 
+cat("\n\n End Part 3. \n\n\n\n\n")
+################################################################################
+
+
+
+
+functionsByContext_1_g = ""
+if(cytosineContext_g=="CpG") { 
+       functionsByContext_1_g="14A_forEachType.R"  
+}else{
+  functionsByContext_1_g="14B_forEachType.R"  
+}
+
+source( paste(AbsolutePathOfFunctions_g, "5_onlyForFigures.R", sep="/"                    )  )  
+source( paste(AbsolutePathOfFunctions_g, "6_violinBoxPlots.R", sep="/"                    )  ) 
+source( paste(AbsolutePathOfFunctions_g, "7_heatmaps.R", sep="/"                          )  ) 
+source( paste(AbsolutePathOfFunctions_g, "8_statisticalHypothesisTesting.R", sep="/"      )  ) 
+source( paste(AbsolutePathOfFunctions_g, "9_Correlation_Covariance_Matrices.R", sep="/"   )  )  
+source( paste(AbsolutePathOfFunctions_g, "10_Hierarchical_clustering_methylKit.R", sep="/" )  )  
+source( paste(AbsolutePathOfFunctions_g, "11_Hierarchical_clustering_hclust.R", sep="/"    )  ) 
+source( paste(AbsolutePathOfFunctions_g, "12_PCA_methylKit_further_prcomp.R", sep="/"      )  ) 
+source( paste(AbsolutePathOfFunctions_g, "13_MultidimensionalScaling.R", sep="/"           )  ) 
+source( paste(AbsolutePathOfFunctions_g,  functionsByContext_1_g,  sep="/"                       )  ) 
+source( paste(AbsolutePathOfFunctions_g, "20_MainFunction_for_Tiles.R", sep="/"        )  )
+source( paste(AbsolutePathOfFunctions_g, "21_DMCs_DMRs.R", sep="/"        )  )
+source( paste(AbsolutePathOfFunctions_g, "22_diffMe_select.R", sep="/"        )  )
+source( paste(AbsolutePathOfFunctions_g, "23_DMCs_DMRs_annotation.R", sep="/"        )  )
+ 
+
+
+
+
+
+## Part 4: Analyze some specific regions by methylKit ...
+################################################################################
+cat("\n\n\n\n\n Start Part 4: \n")
+cat("    Analyze some specific regions by using methylKit ... \n\n")
+sink(file = paste(myRunLog_g, "Part_4.runLog.txt", sep="/") )
+Part4_g = paste(outDir_g, "/4_Analyze_SomeRegions",  sep="") 
+if( ! file.exists(Part4_g) )    { dir.create(Part4_g,    recursive = TRUE) }
+source( paste(AbsolutePathOfFunctions_g, "29_MainFunction_for_speRegions.R", sep="/"     )  )
+source( paste(AbsolutePathOfFunctions_g, "30_Compare_10groups_speLoci.R",    sep="/"     )  )
+
+myCompare_10groups_speLoci_g(methylBase_temp_1=my_methylBase_object_g,  
+	                         myPath_temp_1=Part4_g,  qvalue_temp_1=qvalue_g,  
+	                         differenceOfMethylation_temp_1=differenceOfMethylation_g,  
+	                         mergeDistance_temp1=mergeDistance_g,  minBases_temp_1=minBasesSpecificRegions_g,  numCores_temp_1=numCores_g 
+)                                              
+
+sink() 
+cat("\n\n End Part 4. \n\n\n\n\n")
+################################################################################
+
+
+
+
