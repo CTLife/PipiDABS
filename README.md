@@ -6,6 +6,6 @@
 + For comments, bug reports etc..., please visit [Issues](https://github.com/CTLife/PipiDABS/issues) or contact [Yong Peng](http://yongpeng.info). 
 
 ## Citation:
-##### Wei Chen^, Yong Peng^, Xinyi Ma^, Siming Kong, Shuangyan Tan,Yuan Wei,Yangyu Zhao, Wenxin Zhang, Yang Wang*, Liying Yan*, Jie Qiao*. 2020. Integrated Multi-omics Reveal Epigenomic Disturbance of Assisted Reproductive Technologies in Human Offspring. EBioMedicine, 61, 103076. PMID:33099088
+##### Wei Chen^, Yong Peng^, Xinyi Ma^, Siming Kong, Shuangyan Tan,Yuan Wei,Yangyu Zhao, Wenxin Zhang, Yang Wang*, Liying Yan*, Jie Qiao*. 2020. [Integrated Multi-omics Reveal Epigenomic Disturbance of Assisted Reproductive Technologies in Human Offspring](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7585147/). EBioMedicine, 61, 103076. PMID:33099088
                       
-##### Siming Kong^, Yong Peng^, Wei Chen^, Xinyi Ma,Yuan Wei, Yangyu Zhao, Rong Li, Jie Qiao*, Liying Yan*. 2020. Epigenetic Consequences of Hormonal Interactions between Opposite-sex Twin Fetuses. Clinical and Translational Medicine, 10(8): e234. PMID: 33377650
+##### Siming Kong^, Yong Peng^, Wei Chen^, Xinyi Ma,Yuan Wei, Yangyu Zhao, Rong Li, Jie Qiao*, Liying Yan*. 2020. [Epigenetic Consequences of Hormonal Interactions between Opposite-sex Twin Fetuses](https://pubmed.ncbi.nlm.nih.gov/33377650/). Clinical and Translational Medicine, 10(8): e234. PMID: 33377650
